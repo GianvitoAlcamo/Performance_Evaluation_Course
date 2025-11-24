@@ -1,0 +1,46 @@
+version 3
+run General-0-20251124-15:26:31-3965
+attr configname General
+attr datetime 20251124-15:26:31
+attr datetimef 20251124-152631
+attr experiment General
+attr inifile omnetpp.ini
+attr iterationvars ""
+attr iterationvarsd ""
+attr iterationvarsf ""
+attr measurement ""
+attr network Project_Group_10
+attr processid 3965
+attr repetition 0
+attr replication #0
+attr resultdir results
+attr runnumber 0
+attr seedset 0
+config network Project_Group_10
+config cpu-time-limit 1h
+config sim-time-limit 100h
+config **.C 100
+config **.N 10
+config **.T 5
+config **.R 5
+config **.D 5
+config **.Icont 1
+config **.Ifaas 0.2
+config **.K 6
+config **.P 0.5
+
+par Project_Group_10.users.single_user typename "\"projectgroup10.Single_User\""
+par Project_Group_10.users.single_user R 5
+par Project_Group_10.users.single_user D 5
+par Project_Group_10.users typename "\"projectgroup10.Users\""
+par Project_Group_10.users N 10
+par Project_Group_10.users T 5
+par Project_Group_10.users K 6
+par Project_Group_10.users P 0.5
+par Project_Group_10.cloud_platform.server typename "\"projectgroup10.Server\""
+par Project_Group_10.cloud_platform.server C 100
+par Project_Group_10.cloud_platform.server Icont 1
+par Project_Group_10.cloud_platform.server Ifaas 0.2
+par Project_Group_10.cloud_platform typename "\"projectgroup10.Cloud_Platform\""
+par Project_Group_10 typename "\"projectgroup10.simulations.Project_Group_10\""
+
