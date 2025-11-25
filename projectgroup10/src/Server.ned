@@ -24,6 +24,13 @@ simple Server
         double C;
         double Icont;
         double Ifaas;
+
+        @signal[responseTime];
+        @statistic[responseTimeStat](source="responseTime"; record=mean,vector;);
+
+        @signal[utilization];
+        @statistic[utilizationStat](source="utilization"; record=timeavg);
+
     gates:
         input in;
 }

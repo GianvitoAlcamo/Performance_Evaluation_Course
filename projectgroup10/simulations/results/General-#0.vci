@@ -1,0 +1,38 @@
+file 1029525 1764002504                                         
+version 3
+run General-0-20251124-17:41:44-2827
+attr configname General
+attr datetime 20251124-17:41:44
+attr datetimef 20251124-174144
+attr experiment General
+attr inifile omnetpp.ini
+attr iterationvars ""
+attr iterationvarsd ""
+attr iterationvarsf ""
+attr measurement ""
+attr network Project_Group_10
+attr processid 2827
+attr repetition 0
+attr replication #0
+attr resultdir results
+attr runnumber 0
+attr seedset 0
+config network Project_Group_10
+config cpu-time-limit 1h
+config sim-time-limit 1h
+config **.C 100
+config **.N 10
+config **.T 5
+config **.R 5
+config **.D 5
+config **.Icont 1
+config **.Ifaas 0.2
+config **.K 6
+config **.P 0.5
+
+vector 0 Project_Group_10.cloud_platform.server responseTimeStat:vector ETV
+attr "" ""
+attr recordingmode vector
+attr source responseTime
+0	776 1028748 10 58256 1.28605950469 3599.941838471978 25532 0.40000112986 35.089347078922 33670.434814998 126264.69060941
+

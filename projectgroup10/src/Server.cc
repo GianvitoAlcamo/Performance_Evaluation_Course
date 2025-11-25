@@ -26,15 +26,21 @@ void Server::initialize()
     FreeC_ = C_;
     Icont_ = par("Icont").doubleValue();
     Ifaas_ = par("Ifaas").doubleValue();
+    responseTimeSignal = registerSignal("responseTime");
+    utilizationSignal = registerSignal("utilization");
 }
 
 void Server::handleMessage(cMessage *msg)
 {
     Request* request = check_and_cast<Request*>(msg);
     if (msg->isSelfMessage()){
+        double utilization = (C_ - FreeC_) / C_;
+        emit(utilizationSignal, utilization);
+
         FreeC_ += request->getR();
 
-        // emit TO DO
+        simtime_t st = simTime() - msg->getCreationTime();
+        emit(responseTimeSignal, st);
 
         delete(msg);
 
@@ -42,6 +48,10 @@ void Server::handleMessage(cMessage *msg)
             Request* requestFromQueue = check_and_cast<Request*>(queue_.front());
             if(FreeC_ >= requestFromQueue->getR()){
                 queue_.pop();
+
+                double util = (C_ - FreeC_) / C_;
+                emit(utilizationSignal, util);
+
                 FreeC_ -= requestFromQueue->getR();
                 createContainer(requestFromQueue);
             }
