@@ -34,7 +34,9 @@ class Server : public cSimpleModule
     double FreeC_;
     cQueue queue_;
 
+    simsignal_t nJobsInQueueSignal;
     simsignal_t responseTimeSignal;
+    simsignal_t waitingTimeSignal;
     simsignal_t utilizationSignal;
 
     void createContainer(Request* request);

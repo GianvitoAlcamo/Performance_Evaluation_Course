@@ -25,11 +25,18 @@ simple Server
         double Icont;
         double Ifaas;
 
+		@signal[nJobsInQueue];
+		@statistic[nJobsInQueueStat](source="nJobsInQueue"; record=vector;);
+
         @signal[responseTime];
         @statistic[responseTimeStat](source="responseTime"; record=mean,vector;);
 
+		@signal[waitingTime];
+        @statistic[waitingTimeStat](source="waitingTime"; record=mean,vector;);
+
         @signal[utilization];
         @statistic[utilizationStat](source="utilization"; record=timeavg);
+
 
     gates:
         input in;
