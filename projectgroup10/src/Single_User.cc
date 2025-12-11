@@ -34,7 +34,7 @@ void Single_User::initialize()
 
 void Single_User::handleMessage(cMessage *msg)
 {
-    double R=uniform(0,R_);
+    double R=uniform(0.5*R_,R_*1.5);
     double D=exponential(D_);
 
     if(bernoulli(P_)){
