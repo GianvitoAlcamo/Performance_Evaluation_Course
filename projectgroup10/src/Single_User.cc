@@ -63,4 +63,9 @@ void Single_User::scheduleNext()
 }
 
 
+void Single_User::finish(){
+    cancelAndDelete(timer_);
+}
+
+
 } //namespace

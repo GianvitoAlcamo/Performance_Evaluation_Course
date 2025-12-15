@@ -88,5 +88,13 @@ void Server::createContainer(Request* request){
     scheduleAt(simTime() + nextGen, request);
 }
 
+
+void Server::finish(){
+    while(!queue_.isEmpty()){
+        queue_.pop();
+    }
+}
+
+
 } //namespace
 
