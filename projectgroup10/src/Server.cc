@@ -81,7 +81,7 @@ void Server::handleMessage(cMessage *msg)
 }
 
 void Server::createContainer(Request* request){
-    simtime_t nextGen = exponential(request->getD());
+    simtime_t nextGen = request->getD();
     if(request->getType())
         nextGen += 2 * K_ * Ifaas_;
     else
