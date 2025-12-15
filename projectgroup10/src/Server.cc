@@ -29,6 +29,8 @@ void Server::initialize()
     K_ = par("K").intValue();
     nJobsInQueueSignal = registerSignal("nJobsInQueue");
     responseTimeSignal = registerSignal("responseTime");
+    responseTimeContSignal = registerSignal("responseTimeCont");
+    responseTimeFaasSignal = registerSignal("responseTimeFaas");
     waitingTimeSignal = registerSignal("waitingTime");
     utilizationSignal = registerSignal("utilization");
 }
@@ -44,6 +46,10 @@ void Server::handleMessage(cMessage *msg)
 
         simtime_t st_response = simTime() - msg->getCreationTime();
         emit(responseTimeSignal, st_response);
+        if(request->getType())
+            emit(responseTimeFaasSignal, st_response);
+        else
+            emit(responseTimeContSignal, st_response);
 
         delete(msg);
 

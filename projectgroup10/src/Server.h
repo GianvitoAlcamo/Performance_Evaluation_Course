@@ -37,6 +37,8 @@ class Server : public cSimpleModule
 
     simsignal_t nJobsInQueueSignal;
     simsignal_t responseTimeSignal;
+    simsignal_t responseTimeContSignal;
+    simsignal_t responseTimeFaasSignal;
     simsignal_t waitingTimeSignal;
     simsignal_t utilizationSignal;
 

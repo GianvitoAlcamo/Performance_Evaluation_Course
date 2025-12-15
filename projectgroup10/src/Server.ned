@@ -32,6 +32,12 @@ simple Server
         @signal[responseTime];
         @statistic[responseTimeStat](source="responseTime"; record=mean,vector;);
 
+        @signal[responseTimeCont];
+        @statistic[responseTimeContStat](source="responseTimeCont"; record=mean,vector;);
+
+        @signal[responseTimeFaas];
+        @statistic[responseTimeFaasStat](source="responseTimeFaas"; record=mean,vector;);
+
 		@signal[waitingTime];
         @statistic[waitingTimeStat](source="waitingTime"; record=mean,vector;);
 
