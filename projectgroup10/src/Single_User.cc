@@ -37,9 +37,6 @@ void Single_User::handleMessage(cMessage *msg)
 
     if(bernoulli(P_)){
         Request *request = createRequest(R, D, true);
-        request->setD(D);
-        request->setR(R);
-        request->setType(true);
         send(request, "out");
     }
     else{
