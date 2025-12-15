@@ -24,6 +24,7 @@ simple Server
         double C;
         double Icont;
         double Ifaas;
+        int K;
 
 		@signal[nJobsInQueue];
 		@statistic[nJobsInQueueStat](source="nJobsInQueue"; record=vector;);

@@ -32,6 +32,7 @@ class Server : public cSimpleModule
     double Icont_;
     double Ifaas_;
     double FreeC_;
+    int K_;
     cQueue queue_;
 
     simsignal_t nJobsInQueueSignal;

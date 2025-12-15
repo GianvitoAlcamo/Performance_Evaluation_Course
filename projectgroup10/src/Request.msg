@@ -20,5 +20,4 @@ packet Request {
     double R;
     double D;
     bool type; // 0 container-based     1 Faas
-    bool last; // 1 last in Faas 		0 otherwise
 }

@@ -14,7 +14,6 @@
 // 
 
 #include "Single_User.h"
-#include "Request_m.h"
 
 namespace projectgroup10 {
 
@@ -27,7 +26,6 @@ void Single_User::initialize()
     R_ = par("R").doubleValue();
     D_ = par("D").doubleValue();
     P_ = getParentModule()->par("P").doubleValue();
-    K_ = getParentModule()->par("K").intValue();
 
     scheduleNext();
 }
@@ -38,19 +36,16 @@ void Single_User::handleMessage(cMessage *msg)
     double D=exponential(D_);
 
     if(bernoulli(P_)){
-        D=D/K_;
-        R=R/K_;
-        for(int i=0;i<K_;i++){
-            Request *request = new Request("request", D, R, true, i==K_-1);
-            send(request, "out");
-        }
-    }
-    else{
-        Request *request = new Request("request", D, R, false, false);
+        Request *request = createRequest(R, D, true);
+        request->setD(D);
+        request->setR(R);
+        request->setType(true);
         send(request, "out");
     }
-
-
+    else{
+        Request *request = createRequest(R, D, false);
+        send(request, "out");
+    }
 
     scheduleNext();
 }
@@ -62,6 +57,13 @@ void Single_User::scheduleNext()
     scheduleAt(simTime() + nextGen, timer_);
 }
 
+Request* Single_User::createRequest(double R, double D, bool type){
+    Request *request = new Request("request");
+    request->setD(D);
+    request->setR(R);
+    request->setType(type);
+    return request;
+}
 
 void Single_User::finish(){
     cancelAndDelete(timer_);

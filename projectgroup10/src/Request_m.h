@@ -28,7 +28,6 @@ class Request;
  *     double R;
  *     double D;
  *     bool type; // 0 container-based     1 Faas
- *     bool last; // 1 last in Faas 		0 otherwise
  * }
  * </pre>
  */
@@ -38,7 +37,6 @@ class Request : public ::omnetpp::cPacket
     double R = 0;
     double D = 0;
     bool type = false;
-    bool last = false;
 
   private:
     void copy(const Request& other);
@@ -47,8 +45,6 @@ class Request : public ::omnetpp::cPacket
     bool operator==(const Request&) = delete;
 
   public:
-    Request(const char *name, double R, double D, bool type, bool last);
-
     Request(const char *name=nullptr, short kind=0);
     Request(const Request& other);
     virtual ~Request();
@@ -65,9 +61,6 @@ class Request : public ::omnetpp::cPacket
 
     virtual bool getType() const;
     virtual void setType(bool type);
-
-    virtual bool getLast() const;
-    virtual void setLast(bool last);
 };
 
 inline void doParsimPacking(omnetpp::cCommBuffer *b, const Request& obj) {obj.parsimPack(b);}

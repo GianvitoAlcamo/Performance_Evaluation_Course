@@ -23,7 +23,6 @@ module Users
     parameters:
         int N;
         double T;
-        int K;
         double P;
     gates:
         output out;

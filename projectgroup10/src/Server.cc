@@ -26,6 +26,7 @@ void Server::initialize()
     FreeC_ = C_;
     Icont_ = par("Icont").doubleValue();
     Ifaas_ = par("Ifaas").doubleValue();
+    K_ = par("K").intValue();
     nJobsInQueueSignal = registerSignal("nJobsInQueue");
     responseTimeSignal = registerSignal("responseTime");
     waitingTimeSignal = registerSignal("waitingTime");
@@ -52,7 +53,7 @@ void Server::handleMessage(cMessage *msg)
                 emit(nJobsInQueueSignal, queue_.getLength());
                 queue_.pop();
 
-                simtime_t st_waiting = simTime() - msg->getCreationTime();
+                simtime_t st_waiting = simTime() - requestFromQueue->getCreationTime();
                 emit(waitingTimeSignal, st_waiting);
 
                 double util = (C_ - FreeC_) / C_;
@@ -82,7 +83,7 @@ void Server::handleMessage(cMessage *msg)
 void Server::createContainer(Request* request){
     simtime_t nextGen = exponential(request->getD());
     if(request->getType())
-        nextGen += 2 * Ifaas_;
+        nextGen += 2 * K_ * Ifaas_;
     else
         nextGen += 2 * Icont_;
     scheduleAt(simTime() + nextGen, request);
@@ -91,7 +92,8 @@ void Server::createContainer(Request* request){
 
 void Server::finish(){
     while(!queue_.isEmpty()){
-        queue_.pop();
+        cMessage *msg = (cMessage *) queue_.pop();
+        delete msg;
     }
 }
 

@@ -152,14 +152,6 @@ void doParsimUnpacking(omnetpp::cCommBuffer *, T& t)
 
 Register_Class(Request)
 
-Request::Request(const char *name, double R, double D, bool type, bool last) : ::omnetpp::cPacket(name)
-{
-    this->R = R;
-    this->D = D;
-    this->type = type;
-    this->last = last;
-}
-
 Request::Request(const char *name, short kind) : ::omnetpp::cPacket(name, kind)
 {
 }
@@ -186,7 +178,6 @@ void Request::copy(const Request& other)
     this->R = other.R;
     this->D = other.D;
     this->type = other.type;
-    this->last = other.last;
 }
 
 void Request::parsimPack(omnetpp::cCommBuffer *b) const
@@ -195,7 +186,6 @@ void Request::parsimPack(omnetpp::cCommBuffer *b) const
     doParsimPacking(b,this->R);
     doParsimPacking(b,this->D);
     doParsimPacking(b,this->type);
-    doParsimPacking(b,this->last);
 }
 
 void Request::parsimUnpack(omnetpp::cCommBuffer *b)
@@ -204,7 +194,6 @@ void Request::parsimUnpack(omnetpp::cCommBuffer *b)
     doParsimUnpacking(b,this->R);
     doParsimUnpacking(b,this->D);
     doParsimUnpacking(b,this->type);
-    doParsimUnpacking(b,this->last);
 }
 
 double Request::getR() const
@@ -237,16 +226,6 @@ void Request::setType(bool type)
     this->type = type;
 }
 
-bool Request::getLast() const
-{
-    return this->last;
-}
-
-void Request::setLast(bool last)
-{
-    this->last = last;
-}
-
 class RequestDescriptor : public omnetpp::cClassDescriptor
 {
   private:
@@ -255,7 +234,6 @@ class RequestDescriptor : public omnetpp::cClassDescriptor
         FIELD_R,
         FIELD_D,
         FIELD_type,
-        FIELD_last,
     };
   public:
     RequestDescriptor();
@@ -322,7 +300,7 @@ const char *RequestDescriptor::getProperty(const char *propertyName) const
 int RequestDescriptor::getFieldCount() const
 {
     omnetpp::cClassDescriptor *base = getBaseClassDescriptor();
-    return base ? 4+base->getFieldCount() : 4;
+    return base ? 3+base->getFieldCount() : 3;
 }
 
 unsigned int RequestDescriptor::getFieldTypeFlags(int field) const
@@ -337,9 +315,8 @@ unsigned int RequestDescriptor::getFieldTypeFlags(int field) const
         FD_ISEDITABLE,    // FIELD_R
         FD_ISEDITABLE,    // FIELD_D
         FD_ISEDITABLE,    // FIELD_type
-        FD_ISEDITABLE,    // FIELD_last
     };
-    return (field >= 0 && field < 4) ? fieldTypeFlags[field] : 0;
+    return (field >= 0 && field < 3) ? fieldTypeFlags[field] : 0;
 }
 
 const char *RequestDescriptor::getFieldName(int field) const
@@ -354,9 +331,8 @@ const char *RequestDescriptor::getFieldName(int field) const
         "R",
         "D",
         "type",
-        "last",
     };
-    return (field >= 0 && field < 4) ? fieldNames[field] : nullptr;
+    return (field >= 0 && field < 3) ? fieldNames[field] : nullptr;
 }
 
 int RequestDescriptor::findField(const char *fieldName) const
@@ -366,7 +342,6 @@ int RequestDescriptor::findField(const char *fieldName) const
     if (strcmp(fieldName, "R") == 0) return baseIndex + 0;
     if (strcmp(fieldName, "D") == 0) return baseIndex + 1;
     if (strcmp(fieldName, "type") == 0) return baseIndex + 2;
-    if (strcmp(fieldName, "last") == 0) return baseIndex + 3;
     return base ? base->findField(fieldName) : -1;
 }
 
@@ -382,9 +357,8 @@ const char *RequestDescriptor::getFieldTypeString(int field) const
         "double",    // FIELD_R
         "double",    // FIELD_D
         "bool",    // FIELD_type
-        "bool",    // FIELD_last
     };
-    return (field >= 0 && field < 4) ? fieldTypeStrings[field] : nullptr;
+    return (field >= 0 && field < 3) ? fieldTypeStrings[field] : nullptr;
 }
 
 const char **RequestDescriptor::getFieldPropertyNames(int field) const
@@ -470,7 +444,6 @@ std::string RequestDescriptor::getFieldValueAsString(omnetpp::any_ptr object, in
         case FIELD_R: return double2string(pp->getR());
         case FIELD_D: return double2string(pp->getD());
         case FIELD_type: return bool2string(pp->getType());
-        case FIELD_last: return bool2string(pp->getLast());
         default: return "";
     }
 }
@@ -490,7 +463,6 @@ void RequestDescriptor::setFieldValueAsString(omnetpp::any_ptr object, int field
         case FIELD_R: pp->setR(string2double(value)); break;
         case FIELD_D: pp->setD(string2double(value)); break;
         case FIELD_type: pp->setType(string2bool(value)); break;
-        case FIELD_last: pp->setLast(string2bool(value)); break;
         default: throw omnetpp::cRuntimeError("Cannot set field %d of class 'Request'", field);
     }
 }
@@ -508,7 +480,6 @@ omnetpp::cValue RequestDescriptor::getFieldValue(omnetpp::any_ptr object, int fi
         case FIELD_R: return pp->getR();
         case FIELD_D: return pp->getD();
         case FIELD_type: return pp->getType();
-        case FIELD_last: return pp->getLast();
         default: throw omnetpp::cRuntimeError("Cannot return field %d of class 'Request' as cValue -- field index out of range?", field);
     }
 }
@@ -528,7 +499,6 @@ void RequestDescriptor::setFieldValue(omnetpp::any_ptr object, int field, int i,
         case FIELD_R: pp->setR(value.doubleValue()); break;
         case FIELD_D: pp->setD(value.doubleValue()); break;
         case FIELD_type: pp->setType(value.boolValue()); break;
-        case FIELD_last: pp->setLast(value.boolValue()); break;
         default: throw omnetpp::cRuntimeError("Cannot set field %d of class 'Request'", field);
     }
 }

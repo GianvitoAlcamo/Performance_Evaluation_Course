@@ -17,6 +17,7 @@
 #define __PROJECTGROUP10_SINGLE_USER_H_
 
 #include <omnetpp.h>
+#include "Request_m.h"
 
 using namespace omnetpp;
 
@@ -32,9 +33,9 @@ class Single_User : public cSimpleModule
     double R_;
     double D_;
     double P_;
-    int K_;
 
     void scheduleNext();
+    Request* createRequest(double R, double D, bool type);
 
 
   protected:
