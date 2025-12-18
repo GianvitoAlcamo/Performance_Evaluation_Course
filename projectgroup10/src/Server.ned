@@ -26,8 +26,11 @@ simple Server
         double Ifaas;
         int K;
 
+		@signal[nJobs];
+		@statistic[nJobsStat](source="nJobs"; record=timeavg,vector;);
+
 		@signal[nJobsInQueue];
-		@statistic[nJobsInQueueStat](source="nJobsInQueue"; record=vector;);
+		@statistic[nJobsInQueueStat](source="nJobsInQueue"; record=timeavg,vector;);
 
         @signal[responseTime];
         @statistic[responseTimeStat](source="responseTime"; record=mean,vector;);

@@ -32,10 +32,10 @@ void Single_User::initialize()
 
 void Single_User::handleMessage(cMessage *msg)
 {
-    double R=uniform(0.5*R_,R_*1.5);
-    double D=exponential(D_);
+    double R=uniform(0.5*R_,R_*1.5,0);
+    double D=exponential(D_,1);
 
-    if(bernoulli(P_)){
+    if(bernoulli(P_,2)){
         Request *request = createRequest(R, D, true);
         send(request, "out");
     }
@@ -50,7 +50,7 @@ void Single_User::handleMessage(cMessage *msg)
 
 void Single_User::scheduleNext()
 {
-    simtime_t nextGen = exponential(Tnew_);
+    simtime_t nextGen = exponential(Tnew_,3);
     scheduleAt(simTime() + nextGen, timer_);
 }
 

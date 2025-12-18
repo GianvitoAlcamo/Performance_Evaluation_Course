@@ -27,12 +27,17 @@ void Server::initialize()
     Icont_ = par("Icont").doubleValue();
     Ifaas_ = par("Ifaas").doubleValue();
     K_ = par("K").intValue();
+    nJobsSignal = registerSignal("nJobs");
     nJobsInQueueSignal = registerSignal("nJobsInQueue");
     responseTimeSignal = registerSignal("responseTime");
     responseTimeContSignal = registerSignal("responseTimeCont");
     responseTimeFaasSignal = registerSignal("responseTimeFaas");
     waitingTimeSignal = registerSignal("waitingTime");
     utilizationSignal = registerSignal("utilization");
+    nJobs=0;
+
+    emit(nJobsSignal, 0);
+    emit(nJobsInQueueSignal, 0);
 }
 
 void Server::handleMessage(cMessage *msg)
@@ -41,6 +46,9 @@ void Server::handleMessage(cMessage *msg)
     if (msg->isSelfMessage()){
         double utilization = (C_ - FreeC_) / C_;
         emit(utilizationSignal, utilization);
+
+        nJobs-=1;
+        emit(nJobsSignal, nJobs);
 
         FreeC_ += request->getR();
 
@@ -62,10 +70,11 @@ void Server::handleMessage(cMessage *msg)
                 simtime_t st_waiting = simTime() - requestFromQueue->getCreationTime();
                 emit(waitingTimeSignal, st_waiting);
 
+                FreeC_ -= requestFromQueue->getR();
+
                 double util = (C_ - FreeC_) / C_;
                 emit(utilizationSignal, util);
 
-                FreeC_ -= requestFromQueue->getR();
                 createContainer(requestFromQueue);
             }
             else
@@ -74,13 +83,14 @@ void Server::handleMessage(cMessage *msg)
 
     }
     else{
+        nJobs+=1;
+        emit(nJobsSignal, nJobs);
         if(FreeC_ > request->getR()){
             FreeC_ -= request->getR();
             createContainer(request);
         }
         else{
-            if(!queue_.isEmpty())
-                emit(nJobsInQueueSignal, queue_.getLength());
+            emit(nJobsInQueueSignal, queue_.getLength());
             queue_.insert(msg);
         }
     }
