@@ -38,19 +38,20 @@ void Server::initialize()
 
     emit(nJobsSignal, 0);
     emit(nJobsInQueueSignal, 0);
+    emit(utilizationSignal, 0);
 }
 
 void Server::handleMessage(cMessage *msg)
 {
     Request* request = check_and_cast<Request*>(msg);
     if (msg->isSelfMessage()){
+        FreeC_ += request->getR();
         double utilization = (C_ - FreeC_) / C_;
         emit(utilizationSignal, utilization);
 
         nJobs-=1;
         emit(nJobsSignal, nJobs);
 
-        FreeC_ += request->getR();
 
         simtime_t st_response = simTime() - msg->getCreationTime();
         emit(responseTimeSignal, st_response);
@@ -64,14 +65,13 @@ void Server::handleMessage(cMessage *msg)
         while(!queue_.isEmpty()){
             Request* requestFromQueue = check_and_cast<Request*>(queue_.front());
             if(FreeC_ >= requestFromQueue->getR()){
-                emit(nJobsInQueueSignal, queue_.getLength());
                 queue_.pop();
+                emit(nJobsInQueueSignal, queue_.getLength());
 
                 simtime_t st_waiting = simTime() - requestFromQueue->getCreationTime();
                 emit(waitingTimeSignal, st_waiting);
 
                 FreeC_ -= requestFromQueue->getR();
-
                 double util = (C_ - FreeC_) / C_;
                 emit(utilizationSignal, util);
 
@@ -87,11 +87,14 @@ void Server::handleMessage(cMessage *msg)
         emit(nJobsSignal, nJobs);
         if(FreeC_ > request->getR()){
             FreeC_ -= request->getR();
+            double util = (C_ - FreeC_) / C_;
+            emit(utilizationSignal, util);
             createContainer(request);
+            emit(waitingTimeSignal, 0);
         }
         else{
-            emit(nJobsInQueueSignal, queue_.getLength());
             queue_.insert(msg);
+            emit(nJobsInQueueSignal, queue_.getLength());
         }
     }
 }
