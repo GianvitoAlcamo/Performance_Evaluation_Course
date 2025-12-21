@@ -32,10 +32,15 @@ class Server : public cSimpleModule
     double Icont_;
     double Ifaas_;
     double FreeC_;
+    int K_;
     cQueue queue_;
+    int nJobs;
 
+    simsignal_t nJobsSignal;
     simsignal_t nJobsInQueueSignal;
     simsignal_t responseTimeSignal;
+    simsignal_t responseTimeContSignal;
+    simsignal_t responseTimeFaasSignal;
     simsignal_t waitingTimeSignal;
     simsignal_t utilizationSignal;
 
