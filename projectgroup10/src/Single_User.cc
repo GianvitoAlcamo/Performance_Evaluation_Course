@@ -21,6 +21,7 @@ Define_Module(Single_User);
 
 void Single_User::initialize()
 {
+    // initialize parameters
     timer_ = new cMessage("generationTimer");
     Tnew_ = getParentModule()->par("T").doubleValue()/getParentModule()->par("N").intValue();
     R_ = par("R").doubleValue();
@@ -35,6 +36,7 @@ void Single_User::handleMessage(cMessage *msg)
     double R=uniform(0.5*R_,R_*1.5,0);
     double D=exponential(D_,1);
 
+    // With probability P_ the request is of type Faas, otherwise it is Container-based
     if(bernoulli(P_,2)){
         Request *request = createRequest(R, D, true);
         send(request, "out");
